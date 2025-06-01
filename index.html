@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Predictor VLD</title>
     <meta name="description" content="Aplicación de IA para predicción de dificultad en videolaringoscopía directa">
+    <!-- Fuente moderna y profesional -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh; padding: 20px;
         }
         .container { 
-            max-width: 900px; margin: 0 auto; background: white;
-            border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            max-width: 900px; margin: 0 auto; background: rgba(255,255,255,0.95);
+            border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.10);
             overflow: hidden; animation: fadeIn 0.8s ease-out;
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
@@ -24,16 +26,9 @@
             color: white; padding: 40px 30px; text-align: center;
             position: relative; overflow: hidden;
         }
-        .header::before {
-            content: ''; position: absolute; top: -50%; left: -50%;
-            width: 200%; height: 200%; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="white" opacity="0.1"/><circle cx="80" cy="80" r="1" fill="white" opacity="0.1"/><circle cx="40" cy="60" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            animation: float 20s infinite linear;
-        }
-        @keyframes float { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
-        
-        .header h1 { font-size: 32px; margin-bottom: 10px; position: relative; z-index: 2; }
-        .header .model-info { font-size: 16px; opacity: 0.95; position: relative; z-index: 2; }
-        .header .author { font-size: 14px; margin-top: 10px; opacity: 0.8; position: relative; z-index: 2; }
+        .header h1 { font-size: 2.3rem; margin-bottom: 10px; font-weight: 700; letter-spacing: 1px; }
+        .header .model-info { font-size: 1.05rem; opacity: 0.97; }
+        .header .author { font-size: 0.98rem; margin-top: 10px; opacity: 0.85; }
         
         .content { padding: 40px 30px; }
         .section { 
@@ -42,9 +37,8 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.08);
             transition: transform 0.3s ease;
         }
-        .section:hover { transform: translateY(-5px); }
-        .section h3 { color: #2c3e50; margin-bottom: 25px; font-size: 20px; display: flex; align-items: center; }
-        .section h3::before { content: '📊'; margin-right: 10px; font-size: 24px; }
+        .section:hover { transform: translateY(-3px); }
+        .section h3 { color: #2c3e50; margin-bottom: 25px; font-size: 1.25rem; font-weight: 700; }
         
         .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .input-group { margin-bottom: 20px; }
@@ -53,35 +47,27 @@
             font-size: 14px;
         }
         .input-group input { 
-            width: 100%; padding: 15px; border: 3px solid #e1e8ed;
+            width: 100%; padding: 15px; border: 2.5px solid #e1e8ed;
             border-radius: 12px; font-size: 16px; transition: all 0.3s ease;
             background: white;
         }
         .input-group input:focus { 
             outline: none; border-color: #1976D2; 
-            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.11);
             transform: translateY(-2px);
         }
         
         .buttons { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 30px; }
         .btn { 
-            padding: 18px 25px; border: none; border-radius: 12px;
-            font-size: 16px; font-weight: 700; cursor: pointer;
+            padding: 17px 25px; border: none; border-radius: 12px;
+            font-size: 15px; font-weight: 700; cursor: pointer;
             transition: all 0.3s ease; text-transform: uppercase;
-            letter-spacing: 1px; position: relative; overflow: hidden;
+            letter-spacing: 0.5px; position: relative; overflow: hidden;
         }
-        .btn::before {
-            content: ''; position: absolute; top: 50%; left: 50%;
-            width: 0; height: 0; background: rgba(255,255,255,0.3);
-            border-radius: 50%; transition: all 0.3s ease;
-            transform: translate(-50%, -50%);
-        }
-        .btn:hover::before { width: 300px; height: 300px; }
-        
         .btn-predict { background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; }
         .btn-example { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
         .btn-clear { background: linear-gradient(135deg, #e67e22, #d35400); color: white; }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); opacity: 0.96; }
         
         .result { 
             margin-top: 30px; padding: 30px; border-radius: 15px;
@@ -92,13 +78,13 @@
         
         .result.high { 
             background: linear-gradient(135deg, #ffebee, #ffcdd2); 
-            color: #c62828; border: 3px solid #ef5350;
-            box-shadow: 0 8px 25px rgba(198, 40, 40, 0.2);
+            color: #c62828; border: 2.5px solid #ef5350;
+            box-shadow: 0 8px 25px rgba(198, 40, 40, 0.13);
         }
         .result.low { 
             background: linear-gradient(135deg, #e8f5e8, #c8e6c9); 
-            color: #2e7d32; border: 3px solid #4caf50;
-            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.2);
+            color: #2e7d32; border: 2.5px solid #4caf50;
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.13);
         }
         
         .details { 
@@ -106,7 +92,7 @@
             background: linear-gradient(145deg, #f1f3f4, #e8eaed); 
             padding: 25px; border-radius: 12px; font-family: 'Courier New', monospace; 
             line-height: 1.8; white-space: pre-line;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.07);
         }
         
         .footer { 
@@ -117,7 +103,7 @@
         .footer p { margin-bottom: 5px; }
         
         .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0; }
-        .stat { text-align: center; padding: 15px; background: rgba(255,255,255,0.9); border-radius: 10px; }
+        .stat { text-align: center; padding: 15px; background: rgba(255,255,255,0.93); border-radius: 10px; }
         .stat .number { font-size: 24px; font-weight: bold; color: #1976D2; }
         .stat .label { font-size: 12px; color: #666; }
         
@@ -134,9 +120,9 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏥 Predictor de Dificultad VLD</h1>
-            <div class="model-info">🤖 XGBoost Machine Learning | AUC: 0.9731 | 100 Árboles de Decisión</div>
-            <div class="author">👨‍⚕️ AVICENA LAB</div>
+            <h1>Predictor de Dificultad VLD</h1>
+            <div class="model-info">XGBoost Machine Learning | AUC: 0.9731 | 100 Árboles de Decisión</div>
+            <div class="author">AVICENA LAB</div>
             
             <div class="stats">
                 <div class="stat">
@@ -160,41 +146,41 @@
                 
                 <div class="input-row">
                     <div class="input-group">
-                        <label for="superficie">🔍 Superficie Lingual (cm²)</label>
+                        <label for="superficie">Superficie Lingual (cm²)</label>
                         <input type="number" id="superficie" step="0.1" placeholder="Ej: 25.5">
                     </div>
                     <div class="input-group">
-                        <label for="distEpiglotis">📏 Distancia Piel-Epiglotis (mm)</label>
+                        <label for="distEpiglotis">Distancia Piel-Epiglotis (mm)</label>
                         <input type="number" id="distEpiglotis" step="0.1" placeholder="Ej: 15.2">
                     </div>
                 </div>
                 
                 <div class="input-row">
                     <div class="input-group">
-                        <label for="distHioides">📐 Distancia Piel-Hueso Hioides (mm)</label>
+                        <label for="distHioides">Distancia Piel-Hueso Hioides (mm)</label>
                         <input type="number" id="distHioides" step="0.1" placeholder="Ej: 12.8">
                     </div>
                     <div class="input-group">
-                        <label for="grosor">📊 Grosor de la Lengua (mm)</label>
+                        <label for="grosor">Grosor de la Lengua (mm)</label>
                         <input type="number" id="grosor" step="0.1" placeholder="Ej: 8.5">
                     </div>
                 </div>
                 
                 <div class="input-row">
                     <div class="input-group">
-                        <label for="edad">👤 Edad (años)</label>
+                        <label for="edad">Edad (años)</label>
                         <input type="number" id="edad" placeholder="Ej: 45">
                     </div>
                     <div class="input-group">
-                        <label for="imc">⚖️ IMC (kg/m²)</label>
+                        <label for="imc">IMC (kg/m²)</label>
                         <input type="number" id="imc" step="0.1" placeholder="Ej: 26.3">
                     </div>
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-predict" onclick="predecir()">🎯 Predecir</button>
-                    <button class="btn btn-example" onclick="cargarEjemplo()">📝 Ejemplo</button>
-                    <button class="btn btn-clear" onclick="limpiar()">🧹 Limpiar</button>
+                    <button class="btn btn-predict" onclick="predecir()">Predecir</button>
+                    <button class="btn btn-example" onclick="cargarEjemplo()">Ejemplo</button>
+                    <button class="btn btn-clear" onclick="limpiar()">Limpiar</button>
                 </div>
             </div>
             
@@ -207,10 +193,10 @@
         </div>
         
         <div class="footer">
-            <p>🏥 <strong>AVICENA LAB</strong> - Especialistas en Anestesiología</p>
-            <p>🤖 <strong>XGBoost Machine Learning</strong> - AUC Score: 97.31% | 🌳 100 Árboles de Decisión</p>
-            <p>⚠️ <strong>Herramienta de apoyo clínico</strong> - No reemplaza el juicio médico profesional</p>
-            <p>📊 Predicción de dificultad en <strong>Videolaringoscopía Directa (VLD)</strong></p>
+            <p><strong>AVICENA LAB</strong> - Especialistas en Anestesiología</p>
+            <p><strong>XGBoost Machine Learning</strong> - AUC Score: 97.31% | 100 Árboles de Decisión</p>
+            <p><strong>Herramienta de apoyo clínico</strong> - No reemplaza el juicio médico profesional</p>
+            <p>Predicción de dificultad en <strong>Videolaringoscopía Directa (VLD)</strong></p>
         </div>
     </div>
 
@@ -257,7 +243,7 @@
                 setTimeout(() => input.style.backgroundColor = 'white', 1000);
             });
             
-            alert(`✓ ${descripcion}\nProbabilidad esperada: ${(probEsperada * 100).toFixed(1)}%\n\n¡Haz clic en PREDECIR para ver el resultado!`);
+            alert(`${descripcion}\nProbabilidad esperada: ${(probEsperada * 100).toFixed(1)}%\n\nHaz clic en PREDECIR para ver el resultado.`);
             ejemploIndex = (ejemploIndex + 1) % CASOS_PRUEBA.length;
         }
         
@@ -288,20 +274,20 @@
             // Validación de entrada
             if (isNaN(superficie) || isNaN(distEpiglotis) || isNaN(distHioides) || 
                 isNaN(grosor) || isNaN(edad) || isNaN(imc)) {
-                alert('❌ Por favor, complete todos los campos con valores numéricos válidos');
+                alert('Por favor, complete todos los campos con valores numéricos válidos');
                 return;
             }
             
             if (superficie <= 0 || distEpiglotis <= 0 || distHioides <= 0 || 
                 grosor <= 0 || edad <= 0 || imc <= 0) {
-                alert('❌ Todos los valores deben ser positivos');
+                alert('Todos los valores deben ser positivos');
                 return;
             }
             
             // Validación de rangos clínicos
-            if (superficie > 50) { alert('⚠️ Superficie lingual muy alta (>50 cm²)'); }
-            if (edad > 100 || edad < 18) { alert('⚠️ Edad fuera del rango típico (18-100 años)'); }
-            if (imc > 50 || imc < 15) { alert('⚠️ IMC fuera del rango típico (15-50 kg/m²)'); }
+            if (superficie > 50) { alert('Superficie lingual muy alta (>50 cm²)'); }
+            if (edad > 100 || edad < 18) { alert('Edad fuera del rango típico (18-100 años)'); }
+            if (imc > 50 || imc < 15) { alert('IMC fuera del rango típico (15-50 kg/m²)'); }
             
             const valores = [superficie, distEpiglotis, distHioides, grosor, edad, imc];
             
@@ -404,36 +390,36 @@
             const confianza = document.getElementById('confianza');
             const detalles = document.getElementById('detalles');
             
-            // Resultado principal con animación
+            // Resultado principal
             if (prediccion === 1) {
-                prediccionTexto.innerHTML = '⚠️ <strong>DIFICULTAD ALTA PREDICHA</strong>';
+                prediccionTexto.innerHTML = '<strong>DIFICULTAD ALTA PREDICHA</strong>';
                 resultado.className = 'result high';
             } else {
-                prediccionTexto.innerHTML = '✅ <strong>DIFICULTAD BAJA PREDICHA</strong>';
+                prediccionTexto.innerHTML = '<strong>DIFICULTAD BAJA PREDICHA</strong>';
                 resultado.className = 'result low';
             }
             
             // Probabilidades detalladas
             probabilidades.innerHTML = `
-                🎯 <strong>Probabilidad Dificultad Alta:</strong> ${(probabilidadAlta * 100).toFixed(1)}%<br>
-                🎯 <strong>Probabilidad Dificultad Baja:</strong> ${((1 - probabilidadAlta) * 100).toFixed(1)}%
+                <strong>Probabilidad Dificultad Alta:</strong> ${(probabilidadAlta * 100).toFixed(1)}%<br>
+                <strong>Probabilidad Dificultad Baja:</strong> ${((1 - probabilidadAlta) * 100).toFixed(1)}%
             `;
             
             // Nivel de confianza
             const conf = Math.max(probabilidadAlta, 1 - probabilidadAlta);
-            let nivel, emoji;
-            if (conf > 0.9) { nivel = "Excelente"; emoji = "🔥"; }
-            else if (conf > 0.8) { nivel = "Muy Alta"; emoji = "💪"; }
-            else if (conf > 0.7) { nivel = "Alta"; emoji = "👍"; }
-            else if (conf > 0.6) { nivel = "Alta"; emoji = "⚖️"; }
-            else { nivel = "Alta"; emoji = "⚠️"; }
+            let nivel;
+            if (conf > 0.9) { nivel = "Excelente"; }
+            else if (conf > 0.8) { nivel = "Muy Alta"; }
+            else if (conf > 0.7) { nivel = "Alta"; }
+            else if (conf > 0.6) { nivel = "Alta"; }
+            else { nivel = "Alta"; }
             
-            confianza.innerHTML = `${emoji} <strong>Confianza del Modelo:</strong> ${nivel} (${(conf * 100).toFixed(1)}%)`;
+            confianza.innerHTML = `<strong>Confianza del Modelo:</strong> ${nivel} (${(conf * 100).toFixed(1)}%)`;
             
             // Análisis detallado
-            let detallesText = `🔬 ANÁLISIS DETALLADO XGBOOST:
+            let detallesText = `ANÁLISIS DETALLADO XGBOOST:
 
-📊 VALORES INGRESADOS:
+VALORES INGRESADOS:
 • Superficie Lingual: ${valores[0]} cm² (μ=${SCALER_MEAN[0].toFixed(1)}, normalizado: ${valoresNorm[0].toFixed(3)})
 • Dist. Piel-Epiglotis: ${valores[1]} mm (μ=${SCALER_MEAN[1].toFixed(1)}, normalizado: ${valoresNorm[1].toFixed(3)})
 • Dist. Piel-Hioides: ${valores[2]} mm (μ=${SCALER_MEAN[2].toFixed(1)}, normalizado: ${valoresNorm[2].toFixed(3)})
@@ -441,27 +427,28 @@
 • Edad: ${valores[4]} años (μ=${SCALER_MEAN[4].toFixed(1)}, normalizado: ${valoresNorm[4].toFixed(3)})
 • IMC: ${valores[5]} kg/m² (μ=${SCALER_MEAN[5].toFixed(1)}, normalizado: ${valoresNorm[5].toFixed(3)})
 
-🎯 IMPORTANCIA DE CARACTERÍSTICAS:`;
+IMPORTANCIA DE CARACTERÍSTICAS:`;
 
             FEATURE_IMPORTANCE.forEach((imp, i) => {
                 const valor = valores[i];
                 const media = SCALER_MEAN[i];
                 const desviacion = valor > media ? "↑" : valor < media ? "↓" : "=";
-                const icono = imp > 0.2 ? "🔥" : imp > 0.1 ? "⭐" : "📊";
-                detallesText += `\n${icono} ${NOMBRES_CARACTERISTICAS[i]}: ${(imp * 100).toFixed(1)}% ${desviacion}`;
+                detallesText += `\n${NOMBRES_CARACTERISTICAS[i]}: ${(imp * 100).toFixed(1)}% ${desviacion}`;
             });
 
-            detallesText += `\n\n🤖 MODELO XGBOOST:
+            detallesText += `
+
+MODELO XGBOOST:
 • Probabilidad Final: ${probabilidadAlta.toFixed(4)}
 • AUC Score: 0.9731 (Excelente Performance)
 • Algoritmo: Gradient Boosting
 
-📈 INTERPRETACIÓN CLÍNICA:
+INTERPRETACIÓN CLÍNICA:
 ${prediccion === 1 ? 
     '• Se recibe dificultad técnica en la VLD\n• Considerar preparación adicional\n• Evaluar técnicas alternativas si es necesario' : 
     '• Procedimiento VLD probablemente rutinario\n• Condiciones anatómicas favorables\n• Menor complejidad técnica esperada'}
 
-⚠️ NOTA: Esta predicción es una herramienta de apoyo.
+NOTA: Esta predicción es una herramienta de apoyo.
 El juicio clínico profesional siempre prevalece.`;
             
             detalles.textContent = detallesText;
