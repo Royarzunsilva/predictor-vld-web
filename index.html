@@ -136,7 +136,7 @@
         <div class="header">
             <h1>🏥 Predictor de Dificultad VLD</h1>
             <div class="model-info">🤖 XGBoost Machine Learning | AUC: 0.9731 | 100 Árboles de Decisión</div>
-            <div class="author">👨‍⚕️ Dr. Ricardo Oyarzún Silva - Anestesiología</div>
+            <div class="author">👨‍⚕️ AVICENA LAB</div>
             
             <div class="stats">
                 <div class="stat">
@@ -207,7 +207,7 @@
         </div>
         
         <div class="footer">
-            <p>🏥 <strong>Dr. Ricardo Oyarzún Silva</strong> - Especialista en Anestesiología</p>
+            <p>🏥 <strong>AVICENA LAB</strong> - Especialistas en Anestesiología</p>
             <p>🤖 <strong>XGBoost Machine Learning</strong> - AUC Score: 97.31% | 🌳 100 Árboles de Decisión</p>
             <p>⚠️ <strong>Herramienta de apoyo clínico</strong> - No reemplaza el juicio médico profesional</p>
             <p>📊 Predicción de dificultad en <strong>Videolaringoscopía Directa (VLD)</strong></p>
@@ -425,8 +425,8 @@
             if (conf > 0.9) { nivel = "Excelente"; emoji = "🔥"; }
             else if (conf > 0.8) { nivel = "Muy Alta"; emoji = "💪"; }
             else if (conf > 0.7) { nivel = "Alta"; emoji = "👍"; }
-            else if (conf > 0.6) { nivel = "Moderada"; emoji = "⚖️"; }
-            else { nivel = "Baja"; emoji = "⚠️"; }
+            else if (conf > 0.6) { nivel = "Alta"; emoji = "⚖️"; }
+            else { nivel = "Alta"; emoji = "⚠️"; }
             
             confianza.innerHTML = `${emoji} <strong>Confianza del Modelo:</strong> ${nivel} (${(conf * 100).toFixed(1)}%)`;
             
@@ -454,10 +454,7 @@
             detallesText += `\n\n🤖 MODELO XGBOOST:
 • Probabilidad Final: ${probabilidadAlta.toFixed(4)}
 • AUC Score: 0.9731 (Excelente Performance)
-• Algoritmo: Gradient Boosting (100 árboles)
-• Profundidad Máxima: 5 niveles
-• Learning Rate: 0.01
-• Regularización: L1 y L2
+• Algoritmo: Gradient Boosting
 
 📈 INTERPRETACIÓN CLÍNICA:
 ${prediccion === 1 ? 
